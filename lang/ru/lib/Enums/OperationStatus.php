@@ -1,0 +1,3 @@
+<?php
+$MESS['ITSCRIPT_RMQ_OPERATION_SUCCESS'] = 'Успешно';
+$MESS['ITSCRIPT_RMQ_OPERATION_FAIL'] = 'Ошибка';

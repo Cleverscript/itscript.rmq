@@ -1,0 +1,5 @@
+<?php
+$MESS['ITSCRIPT_RMQ_DELETE_TABLES_TITLE'] = 'Удалить данные модуля из БД?';
+$MESS['ITSCRIPT_RMQ_DELETE_YES'] = 'Да';
+$MESS['ITSCRIPT_RMQ_DELETE_NO'] = 'Нет';
+$MESS['ITSCRIPT_RMQ_DELETE_SUBMIT'] = 'Далее';
