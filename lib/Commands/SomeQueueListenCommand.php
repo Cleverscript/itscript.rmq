@@ -34,20 +34,15 @@ class SomeQueueListenCommand extends AbstractCommand
 
     protected function exec(InputInterface $input, OutputInterface $output): void
     {
-        $moduleService = ServiceLocator::getInstance()->get(ITSCRIPT_RMQ_MODULE_ID . '.ModuleService');
-
         $exchange = self::EXCHANGE_NAME;
         $queue = self::QUEUE_NAME;
         $consumerTag = 'consumer';
 
-        // TODO: вынести кудато глобально в ServiceLocator например в include.php
-        $connection = new AMQPStreamConnection(
-            $moduleService->getPropVal('ITSCRIPT_RMQ_HOST'),
-            $moduleService->getPropVal('ITSCRIPT_RMQ_PORT'),
-            $moduleService->getPropVal('ITSCRIPT_RMQ_USER'),
-            $moduleService->getPropVal('ITSCRIPT_RMQ_PASS'),
-            $moduleService->getPropVal('ITSCRIPT_RMQ_VHOST')
-        );
+        if (ServiceLocator::getInstance()->has(self::AMPQSTREAM_CONNECTION_SERVICE_NAME)) {
+            throw new SystemException('Service ' . self::AMPQSTREAM_CONNECTION_SERVICE_NAME . ' not registered in container');
+        }
+
+        $connection = ServiceLocator::getInstance()->get(self::AMPQSTREAM_CONNECTION_SERVICE_NAME);
 
         $channel = $connection->channel();
 

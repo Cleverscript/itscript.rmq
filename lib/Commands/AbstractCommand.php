@@ -3,7 +3,6 @@
 namespace Itscript\Rmq\Commands;
 
 use Bitrix\Main\Loader;
-use Bitrix\Main\SystemException;
 use Itscript\Rmq\Helpers\Logger;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DebugFormatterHelper;
@@ -14,6 +13,7 @@ abstract class AbstractCommand extends Command
 {
     public const BEGIN_MSG = '';
     public const END_MSG = '';
+    public const AMPQSTREAM_CONNECTION_SERVICE_NAME = ITSCRIPT_RMQ_MODULE_ID . '.AMQPStreamConnectionService';
 
     public function __construct(string $name = null)
     {
