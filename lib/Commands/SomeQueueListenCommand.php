@@ -4,6 +4,7 @@ namespace Itscript\Rmq\Commands;
 
 use Bitrix\Main\Application;
 use Bitrix\Main\DI\ServiceLocator;
+use Itscript\Rmq\Helpers\Logger;
 use Bitrix\Main\SystemException;
 use Symfony\Component\Console\Helper\DebugFormatterHelper;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -14,8 +15,8 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 class SomeQueueListenCommand extends AbstractCommand
 {
-    protected const EXCHANGE_NAME = ITSCRIPT_RMQ_MODULE_ID . '.direct';
-    protected const QUEUE_NAME = ITSCRIPT_RMQ_MODULE_ID . '.some';
+    protected const EXCHANGE_NAME = 'direct';
+    protected const QUEUE_NAME = 'some';
     public const BEGIN_MSG = 'Начато чтение из очереди ' . self::QUEUE_NAME;
     public const END_MSG = 'Чтение из очереди завершено' . self::QUEUE_NAME;
 
@@ -51,9 +52,7 @@ class SomeQueueListenCommand extends AbstractCommand
         $channel = $connection->channel();
 
         $callback = function ($message) use ($channel, $exchange, $queue) {
-            //$data = json_decode($message->body, true);
-
-            pLog($message->body);
+            Logger::write($message->body);
         };
 
         $channel->basic_consume($queue, $consumerTag, false, true, false, false, $callback);

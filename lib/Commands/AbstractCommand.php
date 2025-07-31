@@ -4,6 +4,7 @@ namespace Itscript\Rmq\Commands;
 
 use Bitrix\Main\Loader;
 use Bitrix\Main\SystemException;
+use Itscript\Rmq\Helpers\Logger;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DebugFormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,20 +37,22 @@ abstract class AbstractCommand extends Command
             $this->exec($input, $output);
 
             if (!empty(static::END_MSG)) {
-                $output->write((new DebugFormatterHelper)->stop($this->getName(), static::END_MSG, $this->isSuccess,
-                    'END'));
+                $output->write((new DebugFormatterHelper)->stop(
+                    $this->getName(),
+                    static::END_MSG,
+                    $this->isSuccess,
+                    'END'
+                ));
             }
 
             return Command::SUCCESS;
         } catch (\Throwable $e) {
-            // TODO: change to Monolog
-            pLog([$e->getMessage() => $e->getTrace()]);
+            Logger::writeSysException($e->getMessage() . '' . $e->getTraceAsString());
         }
 
-        return Command::FAILURE;
-
-        // return Command::FAILURE;
         // return Command::INVALID
+
+        return Command::FAILURE;
     }
 
     abstract protected function exec(InputInterface $input, OutputInterface $output): void;
