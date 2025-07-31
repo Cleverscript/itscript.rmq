@@ -2,6 +2,7 @@
 
 namespace Itscript\Rmq\Services;
 
+use Bitrix\Main\Config\Option;
 use Itscript\Rmq\Traits\ModuleTrait;
 use Bitrix\Main\Application;
 
@@ -28,9 +29,11 @@ class ModuleService
     private function setPropVals(): void
     {
         $conn = Application::getConnection();
-        $this->propVals = array_column(
-            $conn->query("SELECT `NAME`, `VALUE` FROM `b_option` WHERE `MODULE_ID` = '" . self::$moduleId . "'")->fetchAll(),
-            'VALUE', 'NAME'
-        );
+
+        $rows = $conn->query("SELECT `NAME` FROM `b_option` WHERE `MODULE_ID` = '" . self::$moduleId . "'")->fetchAll();
+
+        foreach ($rows as $row) {
+            $this->propVals[$row['NAME']] = Option::get(self::$moduleId, $row['NAME']);
+        }
     }
 }
